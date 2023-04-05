@@ -1,0 +1,37 @@
+{
+  "QA": {
+    "INIT": {
+      "prompt": "Given the following medical question , respond with the phrase that best answers the question.\n\n--Example--\nQuestion:A mother brings her 3- week - old infant to the pediatrician 's office because she is concerned about his feeding habits. He was born without complications and has not had any medical problems up until this time. However , for the past 4 days , he has been fussy , is regurgitating all of his feeds , and his vomit is yellow in color. On physical exam , the child 's abdomen is minimally distended but no other abnormalities are appreciated . What embryologic error could account for this presentation ?\n\nWhat phrase best answers the question posed ?\n\nAnswer : Abnormal migration of ventral pancreatic bud\n----\nQuestion : {question}\n\nWhat phrase best answers the question posed?\n\nAnswer:",
+      "options": [
+        "病症咨询",
+        "医生推荐",
+        "预约挂号",
+        "其他"
+      ]
+    },
+    "DECIDER_INIT": {
+      "prompt": "{question}\n\n{options_filtered_str}\n\nYou think the relative likelihood of each option is {relative_likelihood}. Write a 3 -4 sentence message explaining why you rate the options in that way , without taking a decisive stand.\n\nMessage:",
+      "options": []
+    },
+
+    "RESEARCHER": {
+      "prompt": "You are an expert medical doctor who is guiding a medical student through thinking about which of several answers is best for a given question. You cannot give the student the answer. Your role is to help the student think through the question , specifically by pointing out portions of the question that are important in understanding the problem.\n2 Rules ;\n3 - All responses should include a quote from the question.\n4 - Consider what you , as the teacher , have said in the previous conversation , and do not repeat yourself.\n5 - Responses should be at most 4 sentences long .\n6 - Stop only when you , as the teacher , have pointed out all important aspects of the question in the previous discussion. To stop , respond with 'STOP ' at the next turn.\nYou cannot ;\n - Directly give the answer to the student\n - Include the correct option in your response , or any paraphrasing of the correct answer.\n10 - Do not narrow down the options in your response.\n\nQuestion : { question }\n\nThe previous discussion between you and the expert advisor is as follows ;\n{ chat_history }\n{ last_student_message }\n\nHelp the student find the correct answer by pointing out specific parts of the questions they need to think through, but do not include the correct phrase in your response. Your response should be no more than 3 -4 sentences . If you have pointed out all challenging aspects of the question in the previous conversation , respond with \" STOP \" after the student 's next turn.\n\nResponse:",
+      "options": [
+        "病症信息",
+        "医生信息",
+        "医院信息",
+        "其他"
+      ]
+    },
+    "DECIDER": {
+      "prompt": "You are an expert doctor who is trying to select the answer to a medical question, and is willing to be open - minded about their answer. The questions are taken from a short - answer medical exam , and your role is to arrive at the correct answer.\n\nYou are chatting with an expert medical advisor, who will try to help you think through the problem, but will not directly tell you the answer . They will help you by pointing out aspects of the question that are important in finding the answer . Do not assume that the teacher knows the answer ; only that they know how to think through the question. You can change your answer at any point , but do not assume that the expert knows the exact answer and is providing leading questions . Think about their guidance as a whole , and do not only respond to their last message.\n\nQuestion : {question}\n\nThe previous discussion between you and the expert advisor is as follows ;\n{chat_history}\n{last_teacher_message}\n\nRethink the question by considering what the teacher pointed out, in light of your original hypothesis. Remember they do not know the answer , but only how to think through the question . You can change your mind on the correct answer, but remember that unless the question explicitly asks for multiple answers , you can only provide a single answer . Respond with the option you believe most likely to be the right answer (\" Answer :< SHORT ANSWER >\") and a response to that message (\" Response :< MESSAGE >\") :\n\nAnswer :",
+      "options": [
+        "选择医生",
+        "选择医院",
+        "选择治疗方案",
+        "其他"
+      ]
+    }
+  }
+}
+
