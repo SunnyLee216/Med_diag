@@ -7,7 +7,7 @@ import pandas as pd
 df = pd.read_csv('ddxplus.csv')
 
 
-openai.api_key = "*"
+openai.api_key = "****"
 
 
 
