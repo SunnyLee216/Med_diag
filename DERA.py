@@ -50,16 +50,20 @@ for question in questions:
     #从初始的Decider消息开始，Decider（提示17）和Researcher都只能访问问题和他们自己的对话，他们迭代地讨论问题并尝试获得正确的答案。当研究人员用尽了所有相关信息时，研究人员可以停止对话，否则，它将在n = 3turns后结束。在每一轮中，Decider必须说明他们当前的答案是什么以及他们的推理，并且他们可以选择确认或更改他们的答案.
     # 进行最多3轮的对话
     CHAT_HISTORY = []
+    last_teacher_message = ''
+    last_student_message = ''
+    # 只有被使用过的last_teacher_message和last_student_message才会被放入到CHAT_HISTORY里面
     for turn in range(3):
         # 根据模板，根据占位符'{question}'和'{answer}'放入问题和答案
         ## 如果是第一轮，DECIDER_TURN_prompt = DECIDER_INIT_prompt
-        last_teacher_message = ''
+        
         if turn == 0:
             DECIDER_TURN_prompt = DECIDER_INIT_prompt
         ## 否则，DECIDER_TURN_prompt = DECIDER_TURN_prompt.replace('{answer}', answer)
         else:
             DECIDER_TURN_prompt = QA_template['DECIDER']["prompt"].replace('{question}', question).replace('{chat_history}',''.join(CHAT_HISTORY)).replace('{last_teacher_message}', last_teacher_message)
-            
+        if last_teacher_message=='STOP':
+            DECIDER_TURN_prompt = QA_template['DECIDER_FINAL']["prompt"].replace('{question}', question).replace('{chat_history}',''.join(CHAT_HISTORY)).replace('{last_teacher_message}', last_teacher_message)
         # Decider and Researcher have access only to the question and their own conversation as they iteratively discuss the problem and attempt to achieve the right answer.
         # Decider和Researcher只能访问问题和他们自己的对话，他们迭代地讨论问题并尝试获得正确的答案。使用chatGPT模型
         try:
@@ -77,9 +81,16 @@ for question in questions:
             generated_text = response.choices[0].text.strip()
         else:
             generated_text = ''
+        last_student_message = generated_text
+
+        if last_teacher_message:
+            CHAT_HISTORY.append(last_teacher_message)
+
+
 
         DECIDER_message = generated_text
-        
+        if last_teacher_message=='STOP':
+            break
         # Researcher has access only to the question and their own conversation as they iteratively discuss the problem and attempt to achieve the right answer.
         # Researcher只能访问问题和他们自己的对话，他们迭代地讨论问题并尝试获得正确的答案。使用chatGPT模型
         RESEARCHER_propmt = QA_template['RESEARCHER']["prompt"].replace('{question}', question).replace('{chat_histyory}', '\n'.join(CHAT_HISTORY)).replace('{last_student_message}', DECIDER_message)
@@ -98,8 +109,10 @@ for question in questions:
             generated_text = response.choices[0].text.strip()
         else:
             generated_text = ''
+        
+        last_teacher_message = generated_text
         RESEARCHER_message = generated_text
         CHAT_HISTORY.append(DECIDER_message)
-        CHAT_HISTORY.append(RESEARCHER_message)
+        
         #进入下一轮对话
             
