@@ -28,7 +28,8 @@ Now,Here is the knwoledge serach from outside:
 Regardless of whether external information exists, you should reflect on your previous choices. You need to reconsider whether the diagnosis of this disease is valid.You can change your answer at any point.\nYou should ANSWER:YES/NO and your EXPLANATION for the ANSWER you output.
 """
 
-
+SCORE_FEW_SHOTS = """Here is the information of the patient:
+"""
 
 REFLECTIONS = """
 Previous Trial:

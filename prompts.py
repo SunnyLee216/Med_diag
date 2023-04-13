@@ -22,11 +22,12 @@ Here are some examples:
 
 Here is the information of a new patient:
 {information}
+Imagine you are an senior doctor. Based on the previous dialogue, what is the diagnosis? Based on the above conversation, rank the following diseases according to their likelihood of diagnosis. For example, patients are more likely to be diagnosed with disease A than disease B, and disease A should be ranked first in disease B, and so on.
 The previous ranking of diseases is as follows:
 {previous_rank}
 This is the knowledge of the top 1 diseases:
 {top1_knowledge}
-Assuming that the top 1 disease is correct, Based on the above conversation, what is the diagnosis? 
+Assuming that the top 1 disease is correct
 Regardless of whether external information exists, you should reflect on your previous choices. You need to reconsider whether the diagnosis of this disease is valid.You can change your RANK at any point.\nYou should RANK again and your EXPLANATION for the RANK you output.
 YES/NO:
 Rationale:
@@ -37,11 +38,21 @@ Rationale:
 SCORE ="""你要给以下的医学推理过程进行打分，分数越高，越有可能是正确的答案。
 评分的细则是：
 - 
+-
+-
+-
 Here are some examples:
 {examples}
 (END OF EXAMPLES)
+Here is a new patient's information:
+{information}
+{previous_rank}
+{top1_knowledge}
+{Rationale}
 """
 
+SUMMARIZE ="""Summarize important symptoms that are helpful for doctor to diagnose based on the paragraph. Brief in 3-4 sentences.Paragraph:{paragraph}.
+"""
 
 
 
@@ -84,15 +95,18 @@ rank_agent_prompt = PromptTemplate(
                         input_variables=["examples", "information", "diag_list"],
                         template = RANK_PROMPT,
                         )
-rethink_agnet_prompt = PromptTemplate(
-                        input_variables=["examples","previsious_rank", "top1_knowledge", "information"],
+rethink_agent_prompt = PromptTemplate(
+                        input_variables=["examples", "information","previous_rank", "top1_knowledge"],
                         template = RETHINK_PROMPT,
                         )
 score_agent_prompt = PromptTemplate(
-                        input_variables=["examples"],
+                        input_variables=["examples", "information", "previous_rank", "top1_knowledge", "Rationale"],
                         template=SCORE,
                         )
-
+summarize_prompt = PromptTemplate(
+                        input_variables=["paragraph"],
+                        template=SUMMARIZE,
+)
 react_agent_prompt = PromptTemplate(
                         input_variables=["examples", "question", "scratchpad"],
                         template = REACT_INSTRUCTION,
