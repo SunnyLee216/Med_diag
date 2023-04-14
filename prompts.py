@@ -13,10 +13,11 @@ The list of diseases is as follows:
 RANK:
 """
 
+
 # Here are some examples:
 # {examples}
 # (END OF EXAMPLES)
-
+## TODO add examples
 RETHINK_PROMPT ="""You are an advanced medical reasoning agent that can improve based on self refection. You will be given a previous ranking of diseases and the knowledge of the top 1 disease. You need to reconsider whether the top 1 disease is the most likely diagnosis based on the patient's information and the knowledge of the top 1 disease.
 Here is the information of a new patient:
 {information}
