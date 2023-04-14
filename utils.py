@@ -38,4 +38,13 @@ def list2str(rank_list):
     for i in range(len(rank_list)):
         rank_str += str(i+1) + '. ' + rank_list[i] + '; '
     return rank_str
-    
+
+def str2list(rank_str):
+   # 把string变成list,如"['viral pharyngitis', 'urti', 'tuberculosis', 'bronchitis', 'acute laryngitis', 'possible nstemi / stemi', 'influenza', 'epiglottitis', 'unstable angina', 'stable angina']"--->['acute otitis media', 'urti', 'chagas']
+
+    rank_str = rank_str.replace("'",'').replace('[','').replace(']','')
+    rank_list = rank_str.split(',')
+    rank_list = [x.strip() for x in rank_list]
+    # 去除每个字符串元素里面的
+    rank_list = [x.strip("'") for x in rank_list]
+    return rank_list
